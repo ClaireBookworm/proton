@@ -17,12 +17,13 @@ fps = cap.get(cv2.CAP_PROP_FPS)
 count = 0
 
 def millTime (ms, fps):
-    return (ms/fps) * 100
+    sec = (ms/fps) * 100
+    return float(sec / 60)
 
 def inRange(main, lower, upper):
     c = 0
     for num in range(0, 3):
-        print("main: " + str(main[num]) + " upper: " + str(upper[num]) + " lower: " + str(lower[num]) + ".")
+        # print("main: " + str(main[num]) + " upper: " + str(upper[num]) + " lower: " + str(lower[num]) + ".")
         if int(main[num]) <= int(upper[num]) and int (main[num]) >= int(lower[num]):
             c += 1
     return c >= 3
@@ -56,8 +57,8 @@ while success:
     green = image[10, 10]
     print(green)
     if inRange(green, lower_green, upper_green):
-        print ('Read a new frame%d: ' % count,success)
-        print ("Time: %f" % ((count/16.6)*100))
+        print ('Read frame %d: ' % count,success)
+        print ("Time: %f" % (millTime(count, 60))
         cv2.imwrite("images/" + "frame%d.jpg" % count, image) 
     print ("Num: " + str(count))
     count = count + 1
