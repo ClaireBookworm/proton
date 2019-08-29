@@ -16,9 +16,10 @@ fps = cap.get(cv2.CAP_PROP_FPS)
 
 count = 0
 
-def millTime (ms, fps):
-    sec = (ms/fps) * 100
-    return float(sec / 60)
+def millTime (count, fps):
+    interval = 1.00/(fps/1000)
+    # takes in count and converts to seconds
+    return float(count*interval)
 
 def inRange(main, lower, upper):
     c = 0
@@ -42,25 +43,28 @@ lower_green = [100, 200, 100]
 upper_green = [255, 255, 255]
 
 success = True
-# while success:
+
+results = []
+
 while success:
-    cap.set(cv2.CAP_PROP_POS_MSEC,(count*16.6))    # 60 fps, 16.6
+    #cap.set(cv2.CAP_PROP_POS_MSEC,(count*16.6))    # 60 fps, 16.6
+    cap.set(cv2.CAP_PROP_POS_MSEC,(count*249))
     success,image = cap.read()
     #im = Image.fromarray(image) # Can be many different formats.
     #pix = im.load()
     #green = pix[125, 125]
     
-    #im = Image.fromarray(image)
-    #green = list(image.getdata)
-    #im = Image.fromarray(image.astype('uint8'), 'RGB')
-    #green = im.getpixel((3, 3))
     green = image[10, 10]
-    print(green)
+    # print(green)
     if inRange(green, lower_green, upper_green):
         print ('Read frame %d: ' % count,success)
-        print ("Time: %f" % (millTime(count, 60))
-        cv2.imwrite("images/" + "frame%d.jpg" % count, image) 
+        time = millTime(count, 60)
+        print ("Time: %f" % time)
+        results.append(time)
+        # cv2.imwrite("images/" + "frame%d.jpg" % count, image) 
     print ("Num: " + str(count))
+    print("TIMESTAMPS")
+    print(results)
     count = count + 1
 
 # coor = np.zeroes()
