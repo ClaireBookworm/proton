@@ -5,9 +5,13 @@ Thanks to `openCV` and `PIL` and `imageio` for making this work :)
 
 ## Dependencies
 `pip install opencv-python`
+
 `pip install pillow`
+
 `pip install imageio`
+
 `pip install csv`
+
 *(I know, a lot)*
 
 
