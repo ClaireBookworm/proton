@@ -8,8 +8,11 @@ import imageio
 import csv
 from PIL import Image
 
+filename = input("Enter file name, with extension: ")
+length = int(input("How long is the video, in seconds?: "))
+
 # ENTER FILE NAME
-cap = cv2.VideoCapture('trim.mp4')  
+cap = cv2.VideoCapture(filename)  
 # calculates frame rate -- more accurate
 fps = cap.get(cv2.CAP_PROP_FPS) 
 
@@ -65,7 +68,7 @@ def calc_limit (vid_length, fps):
 
 
 # CALC_LIMIT (video length in seconds, fps) -- fps stays as fps
-limit = calc_limit (20, fps)
+limit = calc_limit (length, fps)
 
 # EXTRACT(results array name, fps, limit) -- limit from above
 extract (results, fps, limit)
@@ -80,16 +83,16 @@ for num in range(0, len(results)):
 def write_results (file, list1):
     with open(file, mode='w') as origin:
         time_writer = csv.writer(origin, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        time_writer.writerow("TIMESTAMPS from Time 0")
-        for num in range(0, len(results)):
-            time_writer.writerow(list1[num])
+        time_writer.writerow(("TIMESTAMPS from Time 0", ''))
+        for num in range(0, len(list1)):
+            time_writer.writerow((list1[num],''))
 
 def write_difference (file, list1):
     with open(file, mode='w') as difference:
         sub_writer = csv.writer(difference, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        sub_writer.writerow("TIMESTAMPS from first flash")
+        sub_writer.writerow(("TIMESTAMPS from first flash",''))
         for num in range(0, len(results)):
-            sub_writer.writerow(list1[num])
+            sub_writer.writerow((list1[num],''))
 
 write_results('results.csv', results)
-write_results('difference.csv', subtract)
+write_difference('difference.csv', subtract)
