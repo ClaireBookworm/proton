@@ -5,6 +5,7 @@ import cv2
 import numpy as np  
 import time
 import imageio
+import csv
 from PIL import Image
 
 # ENTER FILE NAME
@@ -64,7 +65,31 @@ def calc_limit (vid_length, fps):
 
 
 # CALC_LIMIT (video length in seconds, fps) -- fps stays as fps
-limit = calc_limit (60, fps)
+limit = calc_limit (20, fps)
 
 # EXTRACT(results array name, fps, limit) -- limit from above
 extract (results, fps, limit)
+
+subtract = []
+for num in range(0, len(results)):
+    diff = results[num] - results[num-1]
+    if (diff) >= 4:
+        val = results[num] - diff
+        subtract.append(val)
+
+def write_results (file, list1):
+    with open(file, mode='w') as origin:
+        time_writer = csv.writer(origin, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        time_writer.writerow("TIMESTAMPS from Time 0")
+        for num in range(0, len(results)):
+            time_writer.writerow(list1[num])
+
+def write_difference (file, list1):
+    with open(file, mode='w') as difference:
+        sub_writer = csv.writer(difference, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        sub_writer.writerow("TIMESTAMPS from first flash")
+        for num in range(0, len(results)):
+            sub_writer.writerow(list1[num])
+
+write_results('results.csv', results)
+write_results('difference.csv', subtract)
