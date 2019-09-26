@@ -14,7 +14,8 @@ length = int(input("How long is the video, in seconds?: "))
 # ENTER FILE NAME
 cap = cv2.VideoCapture(filename)  
 # calculates frame rate -- more accurate
-fps = cap.get(cv2.CAP_PROP_FPS) 
+# fps = cap.get(cv2.CAP_PROP_FPS) 
+fps = 60
 
 print('Youre camera\'s FPS is: ' + str(fps))
 # should be 16.6 milliseconds / frame because it's 60 fps
@@ -37,31 +38,32 @@ def inRange(main, lower, upper):
 # GREEN COLOR DEFINITION
 lower_green = [100, 200, 100]
 upper_green = [255, 255, 255]
-
+results = [0]
 success = True
 def extract (results, fps, limit):
     count = 0 
     # count is the # of frames we go through, when interval not 1, be careful!
     while count < limit:
         #cap.set(cv2.CAP_PROP_POS_MSEC,(count*16.6))    # 60 fps, 16.6
-        cap.set(cv2.CAP_PROP_POS_MSEC,(count*frame_gap))
-        success,image = cap.read()
-        
+
         green = image[10, 10]
+        time = millTime(count, 60)
         # print(green)
-        if inRange(green, lower_green, upper_green):
-            print ('Read frame %d: ' % count,success) # useless but helpful
-            time = millTime(count, 60)
-            print ("Time: %f" % time)
-            results.append(time)
-            # cv2.imwrite("images/" + "frame%d.jpg" % count, image) 
-        print ("Num: " + str(count))
-        print("TIMESTAMPS")
-        print(results)
+        if ((time - results[-1])>3):
+            cap.set(cv2.CAP_PROP_POS_MSEC,(count*frame_gap))
+            image = cap.read()
+            if inRange(green, lower_green, upper_green):
+                print ('Read frame %d: ' % count,success) # useless but helpful
+                print ("Time: %f" % time)
+                results.append(time)
+                # cv2.imwrite("images/" + "frame%d.jpg" % count, image) 
+            print ("Num: " + str(count))
+            print("TIMESTAMPS")
+            print(results)
         count = count + fInterval
     return count
 
-results = []
+
 
 def calc_limit (vid_length, fps):
     return (vid_length * fps) # vid_length in seconds
