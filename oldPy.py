@@ -2,15 +2,16 @@
 # requires matplotlib and numpy to get opencv
 import sys
 import argparse
-# import cv2 
-import cv2
-import numpy as np  
+# import opencv
+import numpy as np 
+import matplotlib 
+import cv2.cv as cv2 
 import time
 import imageio
 import csv
 from PIL import Image
 
-filename = input("Enter file name, with extension: ")
+filename = raw_input("Enter file name, with extension: ")
 length = int(input("How long is the video, in seconds?: "))
 gap = int(input("How many seconds is between every flash? (secs): "))
 frame_jump = (gap - 2)*60
@@ -28,7 +29,7 @@ frame_gap = (1/fps) * 1000
 fInterval = 5 
 
 def millTime (count, fps):
-    # takes in count and converts to seconds
+    # helper function takes in count and converts to seconds
     return round(count*(1/fps), 2)
 
 # GREEN Definitions
@@ -57,7 +58,7 @@ def extract (results, fps, limit):
             cap.set(cv2.CAP_PROP_POS_MSEC,(count*frame_gap))
             image = cap.read()
             if inRange(green, lower_green, upper_green):
-                print ('Read frame %d: ' % count) 
+                print ('Read frame %d: ' % count,success) # output
                 print ("Time: %f" % time)
                 results.append(time)
                 count += frame_jump # jumps x many frames
