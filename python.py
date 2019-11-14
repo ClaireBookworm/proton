@@ -50,12 +50,14 @@ def extract (results, fps, limit):
     # count is the # of frames we go through, when interval not 1, be careful!
     while count < limit:
         #cap.set(cv2.CAP_PROP_POS_MSEC,(count*16.6))    # 60 fps, 16.6
-        green = image[10, 10]
+        # success, image = cap.read()
+        # green = image[10, 10]
         time = millTime(count, 60)
         # print(green)
         if ((time - results[-1])>3):
             cap.set(cv2.CAP_PROP_POS_MSEC,(count*frame_gap))
             image = cap.read()
+            green = image[10, 10]
             if inRange(green, lower_green, upper_green):
                 print ('Read frame %d: ' % count) 
                 print ("Time: %f" % time)
