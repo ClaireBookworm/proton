@@ -4,4 +4,4 @@ opencv-python==4.1.1.26
 time
 imageio==2.6.1
 csv
-pillow==6.2.0
+pillow==9.0.0
